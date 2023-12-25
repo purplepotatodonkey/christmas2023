@@ -89,9 +89,11 @@ function App() {
         setCorrectAnswers([...correctAnswers, category.title])
         getNewUnanswered()
         setSelected(new Set())
+        setMessage("Correct!")
         return
       } else if (correctCount == 3) {
         setMessage("You're one away!")
+        setMistakesRemaining((mistakesRemaining) => mistakesRemaining - 1)
         return
       }
     }
