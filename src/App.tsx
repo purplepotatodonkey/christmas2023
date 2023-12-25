@@ -25,30 +25,49 @@ const randomizeWords = (game: ConnectionsGame) => {
 
 
 function App() {
-  const [correctAnswers, setCorrectAnswers] = useState([])
+  const [correctAnswers, setCorrectAnswers] = useState<string[]>([])
   const [unanswered, setUnanswered] = useState(randomizeWords(Christmas2023))
   const [selected, setSelected] = useState(new Set())
-  const [mistakes, setMistakes] = useState(0)
+  const [mistakesRemaining, setMistakesRemaining] = useState(4)
+
+  //make sure message disappers
+  const [message, setMessage] = useState<string>()
 
   const checkAnswer = () => {
-    const words = Array.from(selected)
-
-    if (words.length !== 4) {
-      return "You must select 4 words."
-    }
-
-    const category = Christmas2023.categories.find((category) => category.words.includes(words.get))
-    if (!category) {
+    if (selected.size < 4) {
+      setMessage("You must select 4 words.")
       return
     }
 
-    const correct = category.words.every((word) => words.includes(word))
-    if (correct) {
-      setCorrectAnswers([...correctAnswers, category])
-      setUnanswered(unanswered.filter((row) => !row.some((word) => category.words.includes(word))))
-    } else {
-      setMistakes(mistakes + 1)
+    const categories = Christmas2023.categories
+
+    for (let i = 0; i < categories.length; i++) {
+      const category = categories[i]
+      console.log(`checking ${category.title}`)
+      let correctCount = 0
+      
+      const correct = category.words.every((word) => {
+        console.log(`checking ${word}`)
+        if (selected.has(word)) {
+          correctCount++
+        }
+        console.log(`correctCount: ${correctCount}`)
+        console.log(`selected.has(${word}): ${selected.has(word)}`)
+        return selected.has(word)
+      })
+
+      console.log(`correct: ${correct}`)
+
+      if (correct) {
+        setCorrectAnswers([...correctAnswers, category.title])
+        return
+      } else if (correctCount == 3) {
+        setMessage("You're one away!")
+        return
+      }
     }
+    setMistakesRemaining((mistakesRemaining) => mistakesRemaining - 1)
+    console.log('checkAnswer done')
   }
 
   const handleSelect = (word: string ) => {
@@ -61,9 +80,11 @@ function App() {
     }
   }
 
+  console.log(mistakesRemaining)
+
   return (
-    <div className="column">
-      <div className="grid">
+    <div className="column center">
+      <div>
         {unanswered.map((row) => (
           <div className="row">
             {row.map(
@@ -74,10 +95,10 @@ function App() {
           </div>
         ))}
       </div>
-      <div className="row center">
+      <div className="row">
         <button onClick={() => {}}>Hint</button>
         <button onClick={() => {}}>Deselect All</button>
-        <button onClick={() => {}}>Submit</button>
+        <button onClick={checkAnswer}>Submit</button>
       </div>
     </div>
   )
