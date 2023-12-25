@@ -13,6 +13,27 @@
   align-items: center;
 }
 
+.answer-block {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(187, 187, 187);
+  border-radius: 8px;
+  width: 590px;   /* fixed width */
+  height: 80px;  /* fixed height */
+  overflow: auto; /* adds scroll if content overflows */
+  margin: 10px; /* optional: adds margin around the block */
+}
+
+.answer-block h3 {
+  margin: 5px;
+}
+
+.answer-block p {
+  margin: 5px;
+}
+
 .unselected-word-block {
   background-color: lightgrey;
   border-radius: 8px;
@@ -45,6 +66,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.dot {
+  height: 10px; /* Size of the dot */
+  width: 10px; /* Size of the dot */
+  background-color: #000000; /* Color of the dot */
+  border-radius: 50%; /* Makes the shape circular */
+  display: inline-block; /* Allows the dot to sit in line with other elements */
+  margin-left: 5px; /* Optional: space between dots if you have multiple */
 }
 
 button {
